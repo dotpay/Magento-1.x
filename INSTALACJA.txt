@@ -29,17 +29,21 @@ Moduł został przetestowany pod Magento:
 INSTALACJA:
 
 1. Pliki należy przekopiować zgodnie z strukturą w katalogach.
+LUB instalacja przez modman:
+cd $PROJECT
+modman init
+modman clone https://github.com/dotpay/Magento-1.x
 
 2. Następnie w Panelu Administracyjnym platformy Magento w dziale:
    System -> Configuration -> Payment Methods -> Dotpay
    należy:
    - Enabled przełączyć na "Yes"
    - w polu "Sort Order" wpisać zero
-   - podac ID sprzedawcy w systemie Dotpay,
+   - podać ID sprzedawcy w systemie Dotpay,
    - ustalić numer PIN (uprzednio powinien zostać skonfigurowany w panelu "Mój dotpay -> ustawienia -> parametry URLC")
    Należy kliknąć na "Save Config / Zapisz ustawienia".
 
-4. Konieczne jest zaznaczenie opcji zezwolenia parametru URLC w panelu administracyjnym Dotpay.pl.
+3. Konieczne jest zaznaczenie opcji zezwolenia parametru URLC w panelu administracyjnym Dotpay.pl.
    Po zalogowaniu się do panelu z menu "parametry URLC" należy zaznaczyć opcję: [x] Zezwól na przyjęcie
    parametru URLC z zewnętrznego serwisu a następnie zapisać ustawienia.
 
