@@ -1,0 +1,6 @@
+app/code/local/Dotpay/Dotpay                     app/code/local/Dotpay/Dotpay                    
+app/design/frontend/base/default/template/dotpay app/design/frontend/base/default/template/dotpay
+app/etc/modules/Dotpay_Dotpay.xml                app/etc/modules/Dotpay_Dotpay.xml               
+app/locale/pl_PL/Dotpay_Dotpay.csv               app/locale/pl_PL/Dotpay_Dotpay.csv              
+lib/Dotpay                                       lib/Dotpay                                      
+skin/frontend/base/default/images/dotpay         skin/frontend/base/default/images/dotpay        
