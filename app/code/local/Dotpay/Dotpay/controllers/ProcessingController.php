@@ -7,6 +7,10 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
   }
 
   public function redirectAction() {
+    $orderIncrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+    $order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
+    $order->sendNewOrderEmail();
+    $order->save();
     $this->_getCheckout()->setDotpayQuoteId($this->_getCheckout()->getQuoteId());
     $this->getResponse()->setBody($this->getLayout()->createBlock('dotpay/redirect')->toHtml());
     $this->_getCheckout()->unsQuoteId();
