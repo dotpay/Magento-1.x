@@ -32,7 +32,7 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
       'id'          => $this->getConfigData('id'),
       'amount'      => round($this->getOrder()->getGrandTotal(), 2),
       'currency'    => $this->getOrder()->getOrderCurrencyCode(),
-      'description' => Mage::helper('dotpay')->__('Order ID: %s', $this->getOrder()->getRealOrderId()),
+      'description' => Mage::helper('dotpay')->__('Order ID: %s - %s', $this->getOrder()->getRealOrderId(), Mage::app()->getWebsite()->getName()),
       'lang'        => Mage::app()->getLocale()->getLocaleCode(),
       'email'       => $billing->getEmail() ? $billing->getEmail() : $this->getOrder()->getCustomerEmail(),
       'firstname'   => $billing->getFirstname(),
