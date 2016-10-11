@@ -28,7 +28,11 @@ Moduł został przetestowany pod Magento:
 
 INSTALACJA:
 
-1. Pliki należy przekopiować zgodnie z strukturą w katalogach.
+1. Pliki należy przekopiować zgodnie z strukturą w katalogach
+   LUB instalacja przez modman:
+   cd $PROJECT
+   modman init
+   modman clone https://github.com/dotpay/Magento-1.x
 
 2. Następnie w Panelu Administracyjnym platformy Magento w dziale:
    System -> Configuration -> Payment Methods -> Dotpay
