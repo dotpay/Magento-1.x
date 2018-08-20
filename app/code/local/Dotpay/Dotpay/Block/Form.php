@@ -37,7 +37,7 @@ class Dotpay_Dotpay_Block_Form extends Mage_Payment_Block_Form {
             ->setMethodLabelAfterHtml($header->renderView());
         parent::_construct();
     }
-    
+
     /**
      * Returns order object with details of current order
      * @return Mage_Sales_Model_Order Order object
@@ -56,13 +56,13 @@ class Dotpay_Dotpay_Block_Form extends Mage_Payment_Block_Form {
      * @return string|boolean
      */
     public function getPaymentImageSrc() {
-        $pathData = array('images', 'dotpay', 'dotpay', 'logotypy_kanalow.png');
+        $pathData = array('images', 'dotpay', 'dotpay', 'Dotpay_channels.png');
         if (!file_exists(Mage::getDesign()->getFilename(implode(DS, $pathData), array('_type' => 'skin')))) {
             return false;
         }
         return $this->getSkinUrl(implode('/', $pathData));
     }
-    
+
     /**
      * Returns src of payment logo if it exists
      * @return string|boolean

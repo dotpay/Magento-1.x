@@ -23,6 +23,11 @@
 <?php if($this->isWidgetMode()): ?>
 <h3><?php echo Mage::helper('dotpay')->__('Please select your payment channel'); ?></h3>
 <script>
+
+    jQuery(document).ready(function(){
+        jQuery('input[name="form_key"]').remove();
+    });
+
     function onChooseChannel(e) {
         window.dotpayWidget.jQuery('#dotpay_dotpay_redirection_form #submit').attr('disabled', true);
         window.dotpayWidget.jQuery.post('<?php echo $this->getSignatureUrl(); ?>',
@@ -41,7 +46,7 @@
             lang: '<?php echo $this->getLangCode(); ?>'
         },
         request: {
-            test: 
+            test:
 			<?php
 				if((bool)$this->isTestMode() == 1){ echo '1';}else {echo '0';}
 			?> },
@@ -61,8 +66,10 @@
 <?php else: ?>
 <script>
     jQuery(document).ready(function(){
+        jQuery('input[name="form_key"]').remove();
         jQuery('#dotpay_dotpay_redirection_form').submit();
     });
 </script>
 <?php endif; ?>
+
 <?php echo $this->getForm()->toHtml() ?>

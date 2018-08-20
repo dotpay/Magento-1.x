@@ -25,22 +25,22 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
      * Dotpay API type
      */
     const API_VERSION = 'dev';
-    
+
     /**
      * Name of field with CHK security code for payment form
      */
     const CHK = 'chk';
-    
+
     /**
      * Status name of rejected operation
      */
     const operationRejected = 'rejected';
-    
+
     /**
      * Status name of completed operation
      */
     const operationCompleted = 'completed';
-    
+
     /**
      * Returns data of order which should be gave to Dotpay
      * @param int $id Seller ID
@@ -50,21 +50,33 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
      */
     public function getPaymentData($id, $order, $type) {
         $billing = $order->getBillingAddress();
-        $streetData = $this->getDotStreetAndStreetN1($billing->getStreet(-1));
-        $langCode = explode('_', Mage::app()->getLocale()->getLocaleCode());
-		
+        $streetData = $this->getDotStreetAndStreetN1($billing->getStreet1(),$billing->getStreet2());
+
+        /**
+         * All available languages which are supported by Dotpay
+         */
+        $LANGUAGES = array('pl','en','de','it','fr','es','cz','cs','hu','ro','ru');
+
+        $langCode_explode = explode('_', Mage::app()->getLocale()->getLocaleCode());
+
+        if (!in_array($langCode_explode[0], $LANGUAGES)) {
+            $langCode = '';
+          } else{
+            $langCode = $langCode_explode[0];
+          }
+
 		/**
 		 	* fix: for the case when only one field given name and surname
 		*/
 			if(trim($billing->getLastname()) == ''){
 				$NamePrepare = preg_replace('/(\s{2,})/', ' ', $billing->getFirstname());
-				$namefix = explode(" ", trim($NamePrepare), 2);	
-				
-				$firstnameFix = $namefix[0];	
-				$lastnameFix = $namefix[1];	
+				$namefix = explode(" ", trim($NamePrepare), 2);
+
+				$firstnameFix = $namefix[0];
+				$lastnameFix = $namefix[1];
 			}else{
-				$firstnameFix = $billing->getFirstname();	
-				$lastnameFix = $billing->getLastname();	
+				$firstnameFix = $billing->getFirstname();
+				$lastnameFix = $billing->getLastname();
 			}
 
         $data = array(
@@ -72,19 +84,19 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
             'amount'      => round($order->getGrandTotal(), 2),
             'currency'    => $order->getOrderCurrencyCode(),
             'description' => Mage::helper('dotpay')->__('Order ID: %s', $order->getRealOrderId()),
-            'lang'        => $langCode[0],
+            'lang'        => $langCode,
             'email'       => $billing->getEmail() ? $billing->getEmail() : $order->getCustomerEmail(),
-			'firstname'   => $firstnameFix,
-			'lastname'    => $lastnameFix,
+			      'firstname'   => $this->NewPersonName($firstnameFix),
+			      'lastname'    => $this->NewPersonName($lastnameFix),
             'control'     => $order->getRealOrderId(),
-            'URL'         => str_replace('?___SID=U', '', Mage::getUrl('dotpay/processing/status')),
-            'URLC'        => str_replace('?___SID=U', '', Mage::getUrl('dotpay/notification')),
+            'url'         => str_replace('?___SID=U', '', Mage::getUrl('dotpay/processing/status')),
+            'urlc'        => str_replace('?___SID=U', '', Mage::getUrl('dotpay/notification')),
             'country'     => $billing->getCountryModel()->getIso2Code(),
-            'city'        => $billing->getCity(),
-            'postcode'    => $billing->getPostcode(),
+            'city'        => $this->NewCity($billing->getCity()),
+            'postcode'    => $this->NewPostcode($billing->getPostcode()),
             'street'      => $streetData['street'],
             'street_n1'   => $streetData['street_n1'],
-            'phone'       => $billing->getTelephone(),
+            'phone'       => $this->NewPhone($billing->getTelephone()),
             'api_version' => self::API_VERSION,
             'type'        => $type
         );
@@ -93,10 +105,10 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         } else {
             $data['ch_lock'] = 1;
         }
-        
+
         return $data;
     }
-    
+
     /**
      * Gets payment data from payment confirmation request and returns it
      * @return array
@@ -112,6 +124,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
                 'operation_currency' => '',
                 'operation_withdrawal_amount' => '',
                 'operation_commission_amount' => '',
+                'is_completed' => '',
                 'operation_original_amount' => '',
                 'operation_original_currency' => '',
                 'operation_datetime' => '',
@@ -130,7 +143,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         }
         return $this->_confirmFields;
     }
-    
+
     /**
      * Returns total amount from payment confirmation
      * @return float
@@ -138,7 +151,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
     public function getTotalAmount() {
         return $this->_confirmFields['operation_original_amount'];
     }
-    
+
     /**
      * Returns operation currency from payment confirmation
      * @return string
@@ -146,7 +159,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
     public function getOperationCurrency() {
         return $this->_confirmFields['operation_original_currency'];
     }
-    
+
 	/**
      * Returns payment channel number from payment confirmation
      * @return string
@@ -154,8 +167,8 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
     public function getOperationChannel() {
         return $this->_confirmFields['channel'];
     }
-	
-	
+
+
     /**
      * Returns status value from payment confirmation
      * @return string
@@ -163,7 +176,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
     public function getStatus() {
         return $this->_confirmFields['operation_status'];
     }
-    
+
     /**
      * Returns transaction id from payment confirmation
      * @return string
@@ -171,7 +184,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
     public function getTransactionId() {
         return $this->_confirmFields['operation_number'];
     }
-    
+
     /**
      * Checks consistency of payment confirmation
      * @param string $pin Seller PIN
@@ -188,6 +201,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         $this->_confirmFields['operation_currency'].
         $this->_confirmFields['operation_withdrawal_amount'].
         $this->_confirmFields['operation_commission_amount'].
+        $this->_confirmFields['is_completed'].
         $this->_confirmFields['operation_original_amount'].
         $this->_confirmFields['operation_original_currency'].
         $this->_confirmFields['operation_datetime'].
@@ -202,7 +216,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         $this->_confirmFields['geoip_country'];
 	return ($this->_confirmFields['signature'] == hash('sha256', $signature));
     }
-    
+
     /**
      * Returns CHK for request params
      * @param string $DotpayId Dotpay shop ID
@@ -213,7 +227,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
     public function generateCHK($DotpayId, $DotpayPin, $ParametersArray) {
         if($ParametersArray['type'] == 4) {
             $ParametersArray['bylaw'] = 1;
-            // $ParametersArray['personal_data'] = 1;
+            $ParametersArray['personal_data'] = 1;
         }
         $ParametersArray['id'] = $DotpayId;
         $ChkParametersChain =
@@ -231,10 +245,10 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         (isset($ParametersArray['ch_lock']) ? $ParametersArray['ch_lock'] : null).
         (isset($ParametersArray['channel_groups']) ? $ParametersArray['channel_groups'] : null).
         (isset($ParametersArray['onlinetransfer']) ? $ParametersArray['onlinetransfer'] : null).
-        (isset($ParametersArray['URL']) ? $ParametersArray['URL'] : null).
+        (isset($ParametersArray['url']) ? $ParametersArray['url'] : null).
         (isset($ParametersArray['type']) ? $ParametersArray['type'] : null).
         (isset($ParametersArray['buttontext']) ? $ParametersArray['buttontext'] : null).
-        (isset($ParametersArray['URLC']) ? $ParametersArray['URLC'] : null).
+        (isset($ParametersArray['urlc']) ? $ParametersArray['urlc'] : null).
         (isset($ParametersArray['firstname']) ? $ParametersArray['firstname'] : null).
         (isset($ParametersArray['lastname']) ? $ParametersArray['lastname'] : null).
         (isset($ParametersArray['email']) ? $ParametersArray['email'] : null).
@@ -273,12 +287,8 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         (isset($ParametersArray['credit_card_customer_id']) ? $ParametersArray['credit_card_customer_id'] : null).
         (isset($ParametersArray['credit_card_id']) ? $ParametersArray['credit_card_id'] : null).
         (isset($ParametersArray['blik_code']) ? $ParametersArray['blik_code'] : null).
-        (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null).
-        (isset($ParametersArray['recurring_frequency']) ? $ParametersArray['recurring_frequency'] : null).
-        (isset($ParametersArray['recurring_interval']) ? $ParametersArray['recurring_interval'] : null).
-        (isset($ParametersArray['recurring_start']) ? $ParametersArray['recurring_start'] : null).
-        (isset($ParametersArray['recurring_count']) ? $ParametersArray['recurring_count'] : null);
-		
+        (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null);
+
         return hash('sha256',$ChkParametersChain);
     }
 }
