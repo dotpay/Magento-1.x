@@ -36,10 +36,6 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      */
     const OFFICE_IP = '77.79.195.34';
     
-    /**
-     * Local IP
-     */
-    const LOCAL_IP = '127.0.0.1';
 
     /**
      * Currently processed order
@@ -158,7 +154,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      */
     protected function getOrder() {
         if (!$this->_order) {
-            $this->_order = Mage::getModel('sales/order')->loadByIncrementId($this->api->getControl());
+            $this->_order = Mage::getModel('sales/order')->loadByIncrementId($this->api->getControl(1));
             if (!$this->_order) {
                 die('MAGENTO1 - FAIL ORDER: not exist');
             }
@@ -204,16 +200,9 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      */
     protected function checkRequest() {
         $ipAddress = $this->getClientIp();
-        if(
-            !($ipAddress == self::DOTPAY_IP ||
-                (Mage::getModel('dotpay/paymentMethod')->getConfigData('test') && 
-                 ($ipAddress == self::OFFICE_IP ||
-                  $ipAddress == self::LOCAL_IP
-                 )
-                )
-            )
-        ) {
-            die("MAGENTO1 - ERROR (REMOTE ADDRESS: ".$ipAddress.")");
+        if($ipAddress != self::DOTPAY_IP)
+        {
+            die("MAGENTO1 - ERROR (REMOTE ADDRESS: ".$this->getClientIp(1).")");
         }
         if($_SERVER['REQUEST_METHOD'] != 'POST') {
             die("MAGENTO1 - ERROR (METHOD <> POST)");
@@ -265,29 +254,21 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      * @return string
      */
 
-	 function getClientIp()
-    {	
-		$ipaddress = '';
-		 
-        if (function_exists('apache_request_headers')) {
-            $headers = apache_request_headers();
-        } else {
-            $headers = $_SERVER;
-        }
+    public function getClientIp($list_ip = null)
+    {
+        $ipaddress = '';
         // CloudFlare support
-        if (array_key_exists('HTTP_CF_CONNECTING_IP', $headers)) {
+        if (array_key_exists('HTTP_CF_CONNECTING_IP', $_SERVER)) {
             // Validate IP address (IPv4/IPv6)
-            if (filter_var($headers['HTTP_CF_CONNECTING_IP'], FILTER_VALIDATE_IP)) {
-                $ipaddress = $headers['HTTP_CF_CONNECTING_IP']; 
-		 return $ipaddress;   
+            if (filter_var($_SERVER['HTTP_CF_CONNECTING_IP'], FILTER_VALIDATE_IP)) {
+                $ipaddress = $_SERVER['HTTP_CF_CONNECTING_IP'];
+                return $ipaddress;
             }
         }
-        if (array_key_exists('X-Forwarded-For', $headers)) {
-            $_SERVER['HTTP_X_FORWARDED_FOR'] = $headers['X-Forwarded-For'];
+        if (array_key_exists('X-Forwarded-For', $_SERVER)) {
+            $_SERVER['HTTP_X_FORWARDED_FOR'] = $_SERVER['X-Forwarded-For'];
         }
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] && (!isset($_SERVER['REMOTE_ADDR'])
-            || preg_match('/^127\..*/i', trim($_SERVER['REMOTE_ADDR'])) || preg_match('/^172\.16.*/i', trim($_SERVER['REMOTE_ADDR']))
-            || preg_match('/^192\.168\.*/i', trim($_SERVER['REMOTE_ADDR'])) || preg_match('/^10\..*/i', trim($_SERVER['REMOTE_ADDR'])))) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',')) {
                 $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
                 $ipaddress = $ips[0];
@@ -297,17 +278,19 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
         } else {
             $ipaddress = $_SERVER['REMOTE_ADDR'];
         }
-		
-        if($ipaddress === '0:0:0:0:0:0:0:1' || $ipaddress === '::1') {
-            $ipaddress = self::LOCAL_IP;
-        }		
-		
-		return $ipaddress;
+        if (isset($list_ip) && $list_ip != null) {
+            if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
+                return  $_SERVER["HTTP_X_FORWARDED_FOR"];
+            } else if (array_key_exists('HTTP_CF_CONNECTING_IP', $_SERVER)) {
+                return $_SERVER["HTTP_CF_CONNECTING_IP"];
+            } else if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+                return $_SERVER["REMOTE_ADDR"];
+            }
+        } else {
+            return $ipaddress;
+        }
     }
-	
-	
-	
-	
+
 
     protected function createInvoice($order) {
         if (!$order->canInvoice()) {

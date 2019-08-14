@@ -16,13 +16,13 @@
  */
 
 Plik: INSTALACJA
-Data: 2016-10-24
+Data: 2019-08-14
 Autor: Dotpay.pl
 WWW: http://www.dotpay.pl
 
 Moduł został przetestowany pod Magento:
 
-Magento wer. 1.9.2.4
+Magento wer. 1.9.3.3
 
 
 INSTALACJA:

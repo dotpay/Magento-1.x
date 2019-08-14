@@ -89,8 +89,17 @@ abstract class Dotpay_Dotpay_Model_Api_Api {
      * Returns control field from payment confirmation
      * @return string
      */
-    public function getControl() {
-        return $this->_confirmFields['control'];
+    public function getControl($longcontrol = null) {
+        if($longcontrol != null)
+        {
+            $control = explode('|', (string)$this->_confirmFields['control']);
+            
+            return $control[0];
+
+        }else {
+            return $this->_confirmFields['control'];
+        }
+        
     }
 
 

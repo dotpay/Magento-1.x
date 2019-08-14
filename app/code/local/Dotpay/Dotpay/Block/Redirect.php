@@ -142,12 +142,12 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
 
             $bylaw = $this->getMethodInstance()->getAgreements('bylaw');
             if(trim($bylaw) == '') {
-                $bylaw = 'I accept Dotpay sp. z o.o. <a title=\"regulations of payments\" target=\"_blank\" href=\"https://ssl.dotpay.pl/files/regulamin_dotpay_sa_dokonywania_wplat_w_serwisie_dotpay_en.pdf\">Regulations of Payments</a>.';
+                $bylaw = 'I accept Dotpay sp. z o.o. <a title=\"regulations of payments\" target=\"_blank\" href=\"https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/regulations_of_payments\">Regulations of Payments</a>.';
             }
 
             $personalData = $this->getMethodInstance()->getAgreements('personal_data');
             if(trim($personalData) == '') {
-                $personalData = 'I agree to the use of my personal data by Dotpay sp. z o.o. 30-552 Kraków (Poland), Wielicka 72 for the purpose of\tconducting a process of payments in accordance with applicable Polish laws (Act of 29.08.1997 for the protection of personal data, Dz. U. No 133, pos. 883, as amended). I have the right to inspect and correct my data.';
+                $personalData = 'I acknowledge that in order to implement the payment process the Administrator of mine personal data is Dotpay sp. z o.o. (KRS 0000700791), 30-552 Kraków (Poland), Wielicka 28B, +48126882600, <a href=\"mailto:bok@dotpay.pl\">bok@dotpay.pl</a>, see <a title=\"regulations of payments\" target=\"_blank\" href=\"https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/rodo_en\">the full text of the information clause</a>.';
             }
 
             $form->addField('bylaw', 'dotpay_agreement', array(

@@ -2,7 +2,7 @@
 <config>
   <modules>
     <Dotpay_Dotpay>
-      <version>1.0.7</version>
+      <version>1.0.8</version>
     </Dotpay_Dotpay>
   </modules>
   <global>
@@ -79,6 +79,13 @@
         </Dotpay_Dotpay>
       </modules>
     </translate>
+    <layout>
+        <updates>
+          <dotpay>
+              <file>dotpay_config.xml</file>
+          </dotpay>
+        </updates>
+    </layout>
   </adminhtml>
   <default>
     <payment>

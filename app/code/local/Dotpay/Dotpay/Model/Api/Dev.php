@@ -55,12 +55,12 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         /**
          * All available languages which are supported by Dotpay
          */
-        $LANGUAGES = array('pl','en','de','it','fr','es','cz','cs','hu','ro','ru');
+        $LANGUAGES = array('pl','en','de','it','fr','es','cz','cs','ru','hu','ro','uk','sk');
 
         $langCode_explode = explode('_', Mage::app()->getLocale()->getLocaleCode());
 
         if (!in_array($langCode_explode[0], $LANGUAGES)) {
-            $langCode = '';
+            $langCode = 'en';
           } else{
             $langCode = $langCode_explode[0];
           }
@@ -79,6 +79,10 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
 				$lastnameFix = $billing->getLastname();
 			}
 
+            $MagentoVersion = Mage::getVersion();
+            $DPmoduleVersion = Mage::getConfig()->getNode()->modules->Dotpay_Dotpay->version;
+
+
         $data = array(
             'id'          => $id,
             'amount'      => round($order->getGrandTotal(), 2),
@@ -86,9 +90,9 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
             'description' => Mage::helper('dotpay')->__('Order ID: %s', $order->getRealOrderId()),
             'lang'        => $langCode,
             'email'       => $billing->getEmail() ? $billing->getEmail() : $order->getCustomerEmail(),
-			      'firstname'   => $this->NewPersonName($firstnameFix),
-			      'lastname'    => $this->NewPersonName($lastnameFix),
-            'control'     => $order->getRealOrderId(),
+			'firstname'   => $this->NewPersonName($firstnameFix),
+			'lastname'    => $this->NewPersonName($lastnameFix),
+            'control'     => $order->getRealOrderId().'|Magento v.'.$MagentoVersion.'|DP module v: '.$DPmoduleVersion ,
             'url'         => str_replace('?___SID=U', '', Mage::getUrl('dotpay/processing/status')),
             'urlc'        => str_replace('?___SID=U', '', Mage::getUrl('dotpay/notification')),
             'country'     => $billing->getCountryModel()->getIso2Code(),
@@ -103,7 +107,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         if($type == 0){
             $data['ch_lock'] = 0;
         } else {
-            $data['ch_lock'] = 1;
+            $data['ch_lock'] = 0;
         }
 
         return $data;
@@ -133,7 +137,15 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
                 'description' => '',
                 'email' => '',
                 'p_info' => '',
-                'p_email' => '',
+                'p_email' => '',			
+				'credit_card_issuer_identification_number' => '',
+				'credit_card_masked_number' => '',
+				'credit_card_expiration_year' => '',
+				'credit_card_expiration_month' => '',
+				'credit_card_brand_codename' => '',
+				'credit_card_brand_code' => '',
+				'credit_card_unique_identifier' => '',
+				'credit_card_id' => '',				
                 'channel' => '',
                 'channel_country' => '',
                 'geoip_country' => '',
@@ -211,10 +223,20 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         $this->_confirmFields['email'].
         $this->_confirmFields['p_info'].
         $this->_confirmFields['p_email'].
+        $this->_confirmFields['credit_card_issuer_identification_number'].
+        $this->_confirmFields['credit_card_masked_number'].
+        $this->_confirmFields['credit_card_expiration_year'].
+        $this->_confirmFields['credit_card_expiration_month'].
+        $this->_confirmFields['credit_card_brand_codename'].
+        $this->_confirmFields['credit_card_brand_code'].
+        $this->_confirmFields['credit_card_unique_identifier'].
+        $this->_confirmFields['credit_card_id'].	
         $this->_confirmFields['channel'].
         $this->_confirmFields['channel_country'].
         $this->_confirmFields['geoip_country'];
-	return ($this->_confirmFields['signature'] == hash('sha256', $signature));
+
+	    return ($this->_confirmFields['signature'] == hash('sha256', $signature));
+  
     }
 
     /**
@@ -233,9 +255,9 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         $ChkParametersChain =
         $DotpayPin.
         (isset($ParametersArray['api_version']) ? $ParametersArray['api_version'] : null).
-        (isset($ParametersArray['charset']) ? $ParametersArray['charset'] : null).
-        (isset($ParametersArray['lang']) ?  $ParametersArray['lang'] : null).
+        (isset($ParametersArray['lang']) ? $ParametersArray['lang'] : null).
         (isset($ParametersArray['id']) ? $ParametersArray['id'] : null).
+        (isset($ParametersArray['pid']) ? $ParametersArray['pid'] : null).
         (isset($ParametersArray['amount']) ? $ParametersArray['amount'] : null).
         (isset($ParametersArray['currency']) ? $ParametersArray['currency'] : null).
         (isset($ParametersArray['description']) ? $ParametersArray['description'] : null).
@@ -266,6 +288,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         (isset($ParametersArray['p_email']) ? $ParametersArray['p_email'] : null).
         (isset($ParametersArray['n_email']) ? $ParametersArray['n_email'] : null).
         (isset($ParametersArray['expiration_date']) ? $ParametersArray['expiration_date'] : null).
+        (isset($ParametersArray['deladdr']) ? $ParametersArray['deladdr'] : null).
         (isset($ParametersArray['recipient_account_number']) ? $ParametersArray['recipient_account_number'] : null).
         (isset($ParametersArray['recipient_company']) ? $ParametersArray['recipient_company'] : null).
         (isset($ParametersArray['recipient_first_name']) ? $ParametersArray['recipient_first_name'] : null).
@@ -275,6 +298,8 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         (isset($ParametersArray['recipient_address_apartment']) ? $ParametersArray['recipient_address_apartment'] : null).
         (isset($ParametersArray['recipient_address_postcode']) ? $ParametersArray['recipient_address_postcode'] : null).
         (isset($ParametersArray['recipient_address_city']) ? $ParametersArray['recipient_address_city'] : null).
+        (isset($ParametersArray['application']) ? $ParametersArray['application'] : null).
+        (isset($ParametersArray['application_version']) ? $ParametersArray['application_version'] : null).
         (isset($ParametersArray['warranty']) ? $ParametersArray['warranty'] : null).
         (isset($ParametersArray['bylaw']) ? $ParametersArray['bylaw'] : null).
         (isset($ParametersArray['personal_data']) ? $ParametersArray['personal_data'] : null).
@@ -287,8 +312,28 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         (isset($ParametersArray['credit_card_customer_id']) ? $ParametersArray['credit_card_customer_id'] : null).
         (isset($ParametersArray['credit_card_id']) ? $ParametersArray['credit_card_id'] : null).
         (isset($ParametersArray['blik_code']) ? $ParametersArray['blik_code'] : null).
-        (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null);
+        (isset($ParametersArray['credit_card_registration']) ? $ParametersArray['credit_card_registration'] : null).
+        (isset($ParametersArray['surcharge_amount']) ? $ParametersArray['surcharge_amount'] : null).
+        (isset($ParametersArray['surcharge']) ? $ParametersArray['surcharge'] : null).
+        (isset($ParametersArray['surcharge']) ? $ParametersArray['surcharge'] : null).
+        (isset($ParametersArray['ignore_last_payment_channel']) ? $ParametersArray['ignore_last_payment_channel'] : null).
+        (isset($ParametersArray['vco_call_id']) ? $ParametersArray['vco_call_id'] : null).
+        (isset($ParametersArray['vco_update_order_info']) ? $ParametersArray['vco_update_order_info'] : null).
+        (isset($ParametersArray['vco_subtotal']) ? $ParametersArray['vco_subtotal'] : null).
+        (isset($ParametersArray['vco_shipping_handling']) ? $ParametersArray['vco_shipping_handling'] : null).
+        (isset($ParametersArray['vco_tax']) ? $ParametersArray['vco_tax'] : null).
+        (isset($ParametersArray['vco_discount']) ? $ParametersArray['vco_discount'] : null).
+        (isset($ParametersArray['vco_gift_wrap']) ? $ParametersArray['vco_gift_wrap'] : null).
+        (isset($ParametersArray['vco_misc']) ? $ParametersArray['vco_misc'] : null).
+        (isset($ParametersArray['vco_promo_code']) ? $ParametersArray['vco_promo_code'] : null).
+        (isset($ParametersArray['credit_card_security_code_required']) ? $ParametersArray['credit_card_security_code_required'] : null).
+        (isset($ParametersArray['credit_card_operation_type']) ? $ParametersArray['credit_card_operation_type'] : null).
+        (isset($ParametersArray['credit_card_avs']) ? $ParametersArray['credit_card_avs'] : null).
+        (isset($ParametersArray['credit_card_threeds']) ? $ParametersArray['credit_card_threeds'] : null).
+        (isset($ParametersArray['customer']) ? $ParametersArray['customer'] : null).
+        (isset($ParametersArray['gp_token']) ? $ParametersArray['gp_token'] : null);
 
-        return hash('sha256',$ChkParametersChain);
+        return hash('sha256', $ChkParametersChain);
+
     }
 }
