@@ -16,8 +16,8 @@
  */
 
 Plik: INSTALACJA
-Data: 2019-08-14
-Autor: Dotpay.pl
+Data: 2021-09-01
+Autor: PayPro S.A.
 WWW: http://www.dotpay.pl
 
 Moduł został przetestowany pod Magento:
@@ -41,12 +41,12 @@ INSTALACJA:
    - Włączone: przełączyć na "Tak",
    - Wersja API: ustaw 
 						"legacy" (ID sklepu ma maks. 5 cyfr)
-						"dev" (ID sklepu ma 6 cyfr)
+						"next" (ID sklepu ma 6 cyfr)
    - ID: numer sprzedawcy w systemie Dotpay,
    - PIN:
 		dla "legacy": uprzednio powinien zostać skonfigurowany w panelu "Mój dotpay -> ustawienia -> parametry URLC"
-		dla "dev": PIN można odnaleźć po zalogowaniu do panelu Dotpay klikając "Ustawienia" na górnym pasku menu	
-   - Tryb testowy: ustaw tylko jeśli masz zarejestrowane osobne konto w środowisku testowym Dotpay ("dev"), ID testowe jest inne niż ID produkcyjne
+		dla "next": PIN można odnaleźć po zalogowaniu do panelu Dotpay klikając "Ustawienia" na górnym pasku menu	
+   - Tryb testowy: ustaw tylko jeśli masz zarejestrowane osobne konto w środowisku testowym Dotpay ("next"), ID testowe jest inne niż ID produkcyjne
    - Widget: Włącz widget z kanałami płatności Dotpay na stronie sklepu
    - Tytuł: Opis jaki pojawi się przy wyborze tej metody płatności
    - Porządek sortowania: domyślnie "1" jako pierwsza metoda płatności.
@@ -59,7 +59,7 @@ INSTALACJA:
    Po zalogowaniu się do panelu z menu "parametry URLC" należy zaznaczyć opcję: [x] Zezwól na przyjęcie
    parametru URLC z zewnętrznego serwisu a następnie zapisać ustawienia.
 	
-	"dev":
+	"next":
 	Po zalogowaniu w panelu administracyjnym w Dotpay, proszę odznaczyć (zezwolić) w panelu Dotpay opcję "Blokuj zewnętrzne urlc" klikając przycisk "Edycja" w sekcji "Ustawienia -> Powiadomienia->Konfiguracja URLC". 
 
 	Dodatkowo w tym samym menu proszę odszukać 2 opcje:

@@ -9,6 +9,7 @@
 "Payment is realized via Dotpay.","Płatność jest realizowana przez Dotpay."
 "Please select your payment channel","Proszę wybrać kanał płatności"
 "Test mode","Tryb testowy"
+"My server does not use a proxy (important for notification)","Mój serwer nie korzysta z proxy (istotne dla notyfikacji)"
 "Automatical invoice after payment","Automatyczna faktura po płatności"
 "Version of API","Wersja API"
 "The order has been paid by","Zamówienie zostało opłacone przy pomocy"

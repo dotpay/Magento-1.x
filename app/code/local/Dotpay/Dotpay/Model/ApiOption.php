@@ -15,7 +15,7 @@
 *
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
-*  @copyright Dotpay
+*  @copyright PayPro S.A.
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *
 */
@@ -32,8 +32,8 @@ class Dotpay_Dotpay_Model_ApiOption {
     public function toOptionArray() {
         return array(
             array(
-                'value' => 'dev',
-                'label' => 'dev',
+                'value' => 'next',
+                'label' => 'next (recommended)',
             ),
             array(
                 'value' => 'legacy',

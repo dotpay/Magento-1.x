@@ -15,7 +15,7 @@
 *
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
-*  @copyright Dotpay
+*  @copyright PayPro S.A.
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *
 */
@@ -114,8 +114,8 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
         }
         $order = Mage::getModel('sales/order')->loadByIncrementId($this->getRequest()->getParam('order'));
         $model = $order->getPayment()->getMethodInstance();
-        if($model->getConfigData('apiversion') == 'dev') {
-            $api = new Dotpay_Dotpay_Model_Api_Dev();
+        if($model->getConfigData('apiversion') == 'next') {
+            $api = new Dotpay_Dotpay_Model_Api_Next();
         } else {
             $api = new Dotpay_Dotpay_Model_Api_Legacy();
         }

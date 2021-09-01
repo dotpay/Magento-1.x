@@ -16,7 +16,7 @@
 *
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
-*  @copyright Dotpay
+*  @copyright PayPro S.A.
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *
 */
@@ -26,10 +26,21 @@
  */
 
 class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Action {
+
+    
     /**
-     * Dotpay server IP
+     * returns Dotpay IP address
+     * @return string
      */
-    const DOTPAY_IP = '195.150.9.37';
+    const DOTPAY_CALLBACK_IP_WHITE_LIST = array(
+        '195.150.9.37',
+        '91.216.191.181',
+        '91.216.191.182',
+        '91.216.191.183',
+        '91.216.191.184',
+        '91.216.191.185',
+        '5.252.202.255',
+        );
     
     /**
      * Dotpay office IP
@@ -148,6 +159,26 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
         }
     }
 
+
+    /**
+     * Returns if the given ip is on the given whitelist.
+    *
+    * @param string $ip        The ip to check.
+    * @param array  $whitelist The ip whitelist. An array of strings.
+    *
+    * @return bool
+    */
+    protected function isAllowedIp($ip, array $whitelist)
+    {
+        $ip = (string)$ip;
+        if (in_array($ip, $whitelist, true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
     /**
      * Returns object with data of current order
      * @return Mage_Sales_Model_Order
@@ -166,7 +197,21 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      * Displays basic information for workers of Dotpay customer service
      */
     protected function displayOfficeInformation() {
-        if($_SERVER['REMOTE_ADDR'] == self::OFFICE_IP && $_SERVER['REQUEST_METHOD'] == 'GET') {
+
+
+        /**
+        * Check external IP address method
+        */
+
+            if ( (int)(Mage::getModel('dotpay/paymentMethod')->getConfigData('nonproxy')) == 1) 
+            {
+                $CHECK_IP = $_SERVER['REMOTE_ADDR'];
+            }else{
+                $CHECK_IP = $this->getClientIp();
+            }
+
+
+        if($CHECK_IP == self::OFFICE_IP && $_SERVER['REQUEST_METHOD'] == 'GET') {
             die("--- Dotpay Magento1 ---"."<br>".
                 "Active: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('test')."<br><br>".
                 "--- System Info ---"."<br>".
@@ -177,6 +222,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
                 "ID: ".Mage::getModel('dotpay/paymentMethod')->getConfigData('id')."<br>".
                 "API Version: ".Mage::getModel('dotpay/paymentMethod')->getConfigData('apiversion')."<br>".
                 "Test Mode: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('test')."<br>".
+                "Server does not use a proxy: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('nonproxy')."<br>".
                 "Email Invoice: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('invoice')."<br>".
                 "Widget: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('widget')
             );
@@ -187,8 +233,8 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      * Sets used API class
      */
     protected function setApi() {
-        if(Mage::getModel('dotpay/paymentMethod')->getConfigData('apiversion') == 'dev') {
-            $this->api = new Dotpay_Dotpay_Model_Api_Dev();
+        if(Mage::getModel('dotpay/paymentMethod')->getConfigData('apiversion') == 'next') {
+            $this->api = new Dotpay_Dotpay_Model_Api_Next();
         } else {
             $this->api = new Dotpay_Dotpay_Model_Api_Legacy();
         }
@@ -199,10 +245,17 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      * Checks request, if it comes from good source and if its method is correct
      */
     protected function checkRequest() {
-        $ipAddress = $this->getClientIp();
-        if($ipAddress != self::DOTPAY_IP)
+
+        if ( (int)(Mage::getModel('dotpay/paymentMethod')->getConfigData('nonproxy')) == 1) 
         {
-            die("MAGENTO1 - ERROR (REMOTE ADDRESS: ".$this->getClientIp(1).")");
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
+        }else{
+            $ipAddress = $this->getClientIp();
+        }
+
+        if (!( $this->isAllowedIp($ipAddress,self::DOTPAY_CALLBACK_IP_WHITE_LIST) ))
+        {
+            die("MAGENTO1 - ERROR (REMOTE ADDRESS: ".$this->getClientIp(1)."/".$_SERVER['REMOTE_ADDR'].")");
         }
         if($_SERVER['REQUEST_METHOD'] != 'POST') {
             die("MAGENTO1 - ERROR (METHOD <> POST)");

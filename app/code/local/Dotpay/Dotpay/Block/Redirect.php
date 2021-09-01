@@ -15,7 +15,7 @@
 *
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
-*  @copyright Dotpay
+*  @copyright PayPro S.A.
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *
 */
@@ -91,15 +91,25 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
      * @return boolean
      */
     public function isTestMode() {
-        return ($this->getMethodInstance()->getConfigData('test') && $this->getMethodInstance()->getConfigData('apiversion') == 'dev');
+        return ($this->getMethodInstance()->getConfigData('test') && $this->getMethodInstance()->getConfigData('apiversion') == 'next');
     }
+
+
+    /**
+     * Checks, if "Server does not use a proxy" is switch on
+     * @return boolean
+     */
+    public function isNonproxyMode() {
+        return ($this->getMethodInstance()->getConfigData('nonproxy'));
+    }
+
 
     /**
      * Checks, if widget mode is switch on
      * @return boolean
      */
     public function isWidgetMode() {
-        return ($this->getMethodInstance()->getConfigData('widget') && $this->getMethodInstance()->getConfigData('apiversion') == 'dev');
+        return ($this->getMethodInstance()->getConfigData('widget') && $this->getMethodInstance()->getConfigData('apiversion') == 'next');
     }
 
     /**
@@ -142,15 +152,15 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
 
             $bylaw = $this->getMethodInstance()->getAgreements('bylaw');
             if(trim($bylaw) == '') {
-                $bylaw = 'I accept Dotpay sp. z o.o. <a title=\"regulations of payments\" target=\"_blank\" href=\"https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/regulations_of_payments\">Regulations of Payments</a>.';
+                $bylaw = 'I accept PayPro S.A. <a title="regulations of payments" target="_blank" href="https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/regulations_of_payments">Regulations of Payments</a>.';
             }
 
             $personalData = $this->getMethodInstance()->getAgreements('personal_data');
             if(trim($personalData) == '') {
-                $personalData = 'I acknowledge that in order to implement the payment process the Administrator of mine personal data is Dotpay sp. z o.o. (KRS 0000700791), 30-552 Kraków (Poland), Wielicka 28B, +48126882600, <a href=\"mailto:bok@dotpay.pl\">bok@dotpay.pl</a>, see <a title=\"regulations of payments\" target=\"_blank\" href=\"https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/rodo_en\">the full text of the information clause</a>.';
+                $personalData = 'I acknowledge that in order to implement the payment process the Administrator of my personal data is PayPro S.A. (KRS 0000347935), 60-327 Poznań (Poland), Kanclerska 15, +48616006170, <a href="mailto:bok@dotpay.pl">bok@dotpay.pl</a>, see <a title="regulations of payments" target="_blank" href="https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/rodo_en">the full text of the information clause</a>.';
             }
 
-            $form->addField('bylaw', 'dotpay_agreement', array(
+            $form->addField('bylaw_label', 'dotpay_agreement', array(
                 'label' => $bylaw,
                 'name' => 'bylaw',
                 'value' => 1,
@@ -158,11 +168,12 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
                 'required' => true,
             ));
 
-		   $form->addField('personal_data', 'hidden', array(
-                'name' => 'personal_data',
-                'value' => 1,
-            ));
-
+           /* 
+                $form->addField('personal_data', 'hidden', array(
+                    'name' => 'personal_data',
+                    'value' => 1,
+                ));
+            */
             $form->addField('personal_data_label', 'note', array(
                 'text' => '<p><em>'.$personalData.'</em></p>',
             ));

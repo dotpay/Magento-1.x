@@ -53,9 +53,18 @@
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
               <depends>
-                  <apiversion>dev</apiversion>
+                  <apiversion>next</apiversion>
               </depends>
             </test>
+            <nonproxy translate="label">
+              <label>My server does not use a proxy (important for notification)</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>1</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </nonproxy>
             <widget translate="label">
               <label>Widget</label>
               <frontend_type>select</frontend_type>
@@ -65,7 +74,7 @@
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
               <depends>
-                  <apiversion>dev</apiversion>
+                  <apiversion>next</apiversion>
               </depends>
             </widget>
             <invoice translate="label">

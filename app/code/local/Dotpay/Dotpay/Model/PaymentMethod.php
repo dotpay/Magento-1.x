@@ -15,7 +15,7 @@
 *
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
-*  @copyright Dotpay
+*  @copyright PayPro S.A.
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *
 */
@@ -69,9 +69,9 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      * @return string
      */
     public function getRedirectUrl() {
-        if (!$this->getConfigData('test') && $this->getConfigData('apiversion') == 'dev') {
+        if (!$this->getConfigData('test') && $this->getConfigData('apiversion') == 'next') {
             return $this->getConfigData('redirect_url');
-        } else if ($this->getConfigData('apiversion') == 'dev') {
+        } else if ($this->getConfigData('apiversion') == 'next') {
             return $this->getConfigData('redirect_url_test');
         } else {
             return $this->getConfigData('redirect_url_legacy');
@@ -122,7 +122,7 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         $langCode = explode('_', Mage::app()->getLocale()->getLocaleCode());
         $dotpayLang = $langCode[0];
         
-        $curlUrl = "{$dotpayUrl}payment_api/channels/";
+        $curlUrl = "{$dotpayUrl}payment_api/v1/channels/";
         $curlUrl .= "?currency={$paymentCurrency}";
         $curlUrl .= "&id={$dotpayId}";
         $curlUrl .= "&amount={$orderAmount}";
@@ -177,13 +177,13 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      * @return array
      */
     public function getRedirectionFormData() {
-        if($this->getConfigData('apiversion') == 'dev') {
-            $api = new Dotpay_Dotpay_Model_Api_Dev();
+        if($this->getConfigData('apiversion') == 'next') {
+            $api = new Dotpay_Dotpay_Model_Api_Next();
         } else {
             $api = new Dotpay_Dotpay_Model_Api_Legacy();
         }
         $data = $api->getPaymentData($this->getConfigData('id'), $this->getOrder(), $this->getConfigData('widget')?4:0);
-        if($this->getConfigData('apiversion') != 'dev' || !$this->getConfigData('widget')) {
+        if($this->getConfigData('apiversion') != 'next' || !$this->getConfigData('widget')) {
             $data[$api::CHK] = $api->generateCHK($this->getConfigData('id'), $this->getConfigData('pin'), $data);
         } else {//choose payment channel before calculation CHK
             $data[$api::CHK] = null;
