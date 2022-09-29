@@ -105,6 +105,15 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
 
 
     /**
+     * Checks if this account was migrated from dotpay to Przelewy24 Api
+     * @return boolean
+     */
+    public function isMigratedtoP24() {
+        return ($this->getMethodInstance()->getConfigData('dproxy_migrated'));
+    }
+
+
+    /**
      * Checks, if widget mode is switch on
      * @return boolean
      */

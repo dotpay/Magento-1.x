@@ -69,13 +69,23 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      * @return string
      */
     public function getRedirectUrl() {
-        if (!$this->getConfigData('test') && $this->getConfigData('apiversion') == 'next') {
-            return $this->getConfigData('redirect_url');
-        } else if ($this->getConfigData('apiversion') == 'next') {
-            return $this->getConfigData('redirect_url_test');
-        } else {
-            return $this->getConfigData('redirect_url_legacy');
+
+        if ($this->getConfigData('dproxy_migrated') && !$this->getConfigData('test')){
+            
+            return $this->getConfigData('redirect_url_dproxy');
+
+        }else{
+                
+            if (!$this->getConfigData('test') && $this->getConfigData('apiversion') == 'next') {
+                return $this->getConfigData('redirect_url');
+            } else if ($this->getConfigData('apiversion') == 'next') {
+                return $this->getConfigData('redirect_url_test');
+            } else {
+                return $this->getConfigData('redirect_url_legacy');
+            }
+            
         }
+
     }
     
     /**

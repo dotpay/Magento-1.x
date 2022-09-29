@@ -10,6 +10,7 @@
 "Please select your payment channel","Виберіть канал оплати"
 "Test mode","Тестовий режим"
 "Automatical invoice after payment","Автоматичний рахунок-фактура після оплати"
+"My account has already been migrated from dotpay to Przelewy24","Мій обліковий запис уже переміщено з dotpay на Przelewy24"
 "Version of API","Версія API"
 "The order has been paid by","Замовлення було оплачено с"
 "Transaction number","Номер транзакції"

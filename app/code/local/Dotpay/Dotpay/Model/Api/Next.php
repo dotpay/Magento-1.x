@@ -96,6 +96,7 @@ class Dotpay_Dotpay_Model_Api_Next extends Dotpay_Dotpay_Model_Api_Api {
 
             $MagentoVersion = Mage::getVersion();
             $DPmoduleVersion = Mage::getConfig()->getNode()->modules->Dotpay_Dotpay->version;
+            $is_dp_proxy = (int)Mage::getModel('dotpay/paymentMethod')->getConfigData('dproxy_migrated');
 
 
         $data = array(
@@ -107,7 +108,7 @@ class Dotpay_Dotpay_Model_Api_Next extends Dotpay_Dotpay_Model_Api_Api {
             'email'       => (string)$billing->getEmail() ? $billing->getEmail() : $order->getCustomerEmail(),
 			'firstname'   => (string)$this->NewPersonName($firstnameFix),
 			'lastname'    => (string)$this->NewPersonName($lastnameFix),
-            'control'     => (string)$order->getRealOrderId().'|Magento v.'.$MagentoVersion.'|DP module v: '.$DPmoduleVersion ,
+            'control'     => (string)$order->getRealOrderId().'|Magento v.'.$MagentoVersion.'|DP module v: '.$DPmoduleVersion.' dp-p24 migrated: '.$is_dp_proxy ,
             'url'         => (string)str_replace('?___SID=U', '', Mage::getUrl('dotpay/processing/status')),
             'urlc'        => (string)str_replace('?___SID=U', '', Mage::getUrl('dotpay/notification')),
             'api_version' => (string)self::API_VERSION,

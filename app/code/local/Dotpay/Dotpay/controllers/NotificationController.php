@@ -39,6 +39,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
         '91.216.191.183',
         '91.216.191.184',
         '91.216.191.185',
+        '5.252.202.254 ',
         '5.252.202.255',
         );
     
@@ -221,6 +222,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
                 "--- Dotpay PLN ---"."<br>".
                 "ID: ".Mage::getModel('dotpay/paymentMethod')->getConfigData('id')."<br>".
                 "API Version: ".Mage::getModel('dotpay/paymentMethod')->getConfigData('apiversion')."<br>".
+                "Account migrated to P24: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('dproxy_migrated')."<br>".
                 "Test Mode: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('test')."<br>".
                 "Server does not use a proxy: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('nonproxy')."<br>".
                 "Email Invoice: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('invoice')."<br>".

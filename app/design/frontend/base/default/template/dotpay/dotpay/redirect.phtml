@@ -46,10 +46,9 @@
             lang: '<?php echo $this->getLangCode(); ?>'
         },
         request: {
-            test:
-			<?php
-				if((bool)$this->isTestMode() == 1){ echo '1';}else {echo '0';}
-			?> },
+            test: <?php if((bool)$this->isTestMode() == 1){ echo '1';}else {echo '0';} ?>,
+            host: '<?php if((bool)$this->isTestMode() == 0 && (bool)$this->isMigratedtoP24() == 1 ){ echo "https://dproxy.przelewy24.pl/t2/payment_api/v1/channels/";}else {echo "https://ssl.dotpay.pl/t2/payment_api/v1/channels/";}?>' 
+            },
         event: {
             onChoose: onChooseChannel
         }

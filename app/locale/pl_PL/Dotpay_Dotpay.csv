@@ -10,6 +10,7 @@
 "Please select your payment channel","Proszę wybrać kanał płatności"
 "Test mode","Tryb testowy"
 "My server does not use a proxy (important for notification)","Mój serwer nie korzysta z proxy (istotne dla notyfikacji)"
+"My account has already been migrated from dotpay to Przelewy24","Moje konto zostało już zmigrowane z Dotpay do Przelewy24"
 "Automatical invoice after payment","Automatyczna faktura po płatności"
 "Version of API","Wersja API"
 "The order has been paid by","Zamówienie zostało opłacone przy pomocy"
