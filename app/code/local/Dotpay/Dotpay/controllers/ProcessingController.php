@@ -114,11 +114,7 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
         }
         $order = Mage::getModel('sales/order')->loadByIncrementId($this->getRequest()->getParam('order'));
         $model = $order->getPayment()->getMethodInstance();
-        if($model->getConfigData('apiversion') == 'next') {
-            $api = new Dotpay_Dotpay_Model_Api_Next();
-        } else {
-            $api = new Dotpay_Dotpay_Model_Api_Legacy();
-        }
+        $api = new Dotpay_Dotpay_Model_Api_Next();
         $data = $api->getPaymentData($model->getConfigData('id'), $order, $model->getConfigData('widget')?4:0);
         $data['channel'] = $this->getRequest()->getParam('channel');
         $signature = $api->generateCHK($model->getConfigData('id'), $model->getConfigData('pin'), $data);

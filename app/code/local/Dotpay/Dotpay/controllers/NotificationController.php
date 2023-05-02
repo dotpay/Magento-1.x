@@ -221,7 +221,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
                 "PHP Version: ".PHP_VERSION."<br><br>".
                 "--- Dotpay PLN ---"."<br>".
                 "ID: ".Mage::getModel('dotpay/paymentMethod')->getConfigData('id')."<br>".
-                "API Version: ".Mage::getModel('dotpay/paymentMethod')->getConfigData('apiversion')."<br>".
+                "API Version: next(!)<br>".
                 "Account migrated to P24: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('dproxy_migrated')."<br>".
                 "Test Mode: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('test')."<br>".
                 "Server does not use a proxy: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('nonproxy')."<br>".
@@ -235,11 +235,8 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      * Sets used API class
      */
     protected function setApi() {
-        if(Mage::getModel('dotpay/paymentMethod')->getConfigData('apiversion') == 'next') {
-            $this->api = new Dotpay_Dotpay_Model_Api_Next();
-        } else {
-            $this->api = new Dotpay_Dotpay_Model_Api_Legacy();
-        }
+ 
+        $this->api = new Dotpay_Dotpay_Model_Api_Next();
         $this->api->getConfirmFieldsList();
     }
     

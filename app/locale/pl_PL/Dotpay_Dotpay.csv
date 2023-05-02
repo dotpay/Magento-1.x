@@ -6,7 +6,7 @@
 "Payment is under processing...","Płatność jest w trakcie przetwarzania"
 "The order has not been paid. You can try again by <a href=""%s"">clicking here</a>.","Zamówienie nie zostało opłacone. Możesz spróbować ponownie <a href=""%s"">klikając tutaj</a>."
 "You will be redirected to our secure payment page where you can pay for your order.","Zostaniesz przekierowany na bezpieczną stronę, gdzie będziesz mógł zapłacić za Twoje zamówienie."
-"Payment is realized via Dotpay.","Płatność jest realizowana przez Dotpay."
+"Payment is realized via Przelewy24.","Płatność jest realizowana przez Przelewy24."
 "Please select your payment channel","Proszę wybrać kanał płatności"
 "Test mode","Tryb testowy"
 "My server does not use a proxy (important for notification)","Mój serwer nie korzysta z proxy (istotne dla notyfikacji)"

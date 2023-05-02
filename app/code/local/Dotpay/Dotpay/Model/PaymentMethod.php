@@ -76,12 +76,10 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
 
         }else{
                 
-            if (!$this->getConfigData('test') && $this->getConfigData('apiversion') == 'next') {
+            if (!$this->getConfigData('test') ) {
                 return $this->getConfigData('redirect_url');
-            } else if ($this->getConfigData('apiversion') == 'next') {
-                return $this->getConfigData('redirect_url_test');
             } else {
-                return $this->getConfigData('redirect_url_legacy');
+                return $this->getConfigData('redirect_url_test');
             }
             
         }
@@ -187,13 +185,11 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      * @return array
      */
     public function getRedirectionFormData() {
-        if($this->getConfigData('apiversion') == 'next') {
-            $api = new Dotpay_Dotpay_Model_Api_Next();
-        } else {
-            $api = new Dotpay_Dotpay_Model_Api_Legacy();
-        }
+
+        $api = new Dotpay_Dotpay_Model_Api_Next();
+
         $data = $api->getPaymentData($this->getConfigData('id'), $this->getOrder(), $this->getConfigData('widget')?4:0);
-        if($this->getConfigData('apiversion') != 'next' || !$this->getConfigData('widget')) {
+        if(!$this->getConfigData('widget')) {
             $data[$api::CHK] = $api->generateCHK($this->getConfigData('id'), $this->getConfigData('pin'), $data);
         } else {//choose payment channel before calculation CHK
             $data[$api::CHK] = null;

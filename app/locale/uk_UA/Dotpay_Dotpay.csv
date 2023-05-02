@@ -6,7 +6,7 @@
 "Payment is under processing...","Оплата обробляється ..."
 "The order has not been paid. You can try again by <a href=""%s"">clicking here</a>.","Замовлення не оплачено. Ви можете спробувати ще раз, <a href=""%s"">натиснувши тут</a>."
 "You will be redirected to our secure payment page where you can pay for your order.","Ви перейдете на захищену сторінку, де ви зможете оплатити своє замовлення."
-"Payment is realized via Dotpay.","Оплата здійснюється DotPay."
+"Payment is realized via Przelewy24.","Оплата здійснюється Przelewy24."
 "Please select your payment channel","Виберіть канал оплати"
 "Test mode","Тестовий режим"
 "Automatical invoice after payment","Автоматичний рахунок-фактура після оплати"

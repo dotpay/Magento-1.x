@@ -56,7 +56,7 @@ class Dotpay_Dotpay_Block_Form extends Mage_Payment_Block_Form {
      * @return string|boolean
      */
     public function getPaymentImageSrc() {
-        $pathData = array('images', 'dotpay', 'dotpay', 'Dotpay_channels.png');
+        $pathData = array('images', 'dotpay', 'dotpay', '6_flagi_Przelewy24.png');
         if (!file_exists(Mage::getDesign()->getFilename(implode(DS, $pathData), array('_type' => 'skin')))) {
             return false;
         }
@@ -68,7 +68,7 @@ class Dotpay_Dotpay_Block_Form extends Mage_Payment_Block_Form {
      * @return string|boolean
      */
     public function getPaymentLogoSrc() {
-        $pathData = array('images', 'dotpay', 'dotpay', 'dotpay_logo.png');
+        $pathData = array('images', 'dotpay', 'dotpay', 'p24_logo_small.png');
         $filename = Mage::getDesign()->getFilename(implode(DS, $pathData), array('_type' => 'skin'));
         if (!file_exists($filename)) {
             return false;

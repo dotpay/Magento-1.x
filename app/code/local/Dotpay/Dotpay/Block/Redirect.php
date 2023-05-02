@@ -91,7 +91,7 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
      * @return boolean
      */
     public function isTestMode() {
-        return ($this->getMethodInstance()->getConfigData('test') && $this->getMethodInstance()->getConfigData('apiversion') == 'next');
+        return ($this->getMethodInstance()->getConfigData('test'));
     }
 
 
@@ -118,7 +118,7 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
      * @return boolean
      */
     public function isWidgetMode() {
-        return ($this->getMethodInstance()->getConfigData('widget') && $this->getMethodInstance()->getConfigData('apiversion') == 'next');
+        return ($this->getMethodInstance()->getConfigData('widget'));
     }
 
     /**
@@ -166,7 +166,7 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
 
             $personalData = $this->getMethodInstance()->getAgreements('personal_data');
             if(trim($personalData) == '') {
-                $personalData = 'I acknowledge that in order to implement the payment process the Administrator of my personal data is PayPro S.A. (KRS 0000347935), 60-327 Poznań (Poland), Kanclerska 15, +48616006170, <a href="mailto:bok@dotpay.pl">bok@dotpay.pl</a>, see <a title="regulations of payments" target="_blank" href="https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/rodo_en">the full text of the information clause</a>.';
+                $personalData = 'I acknowledge that in order to implement the payment process the Administrator of my personal data is PayPro S.A. (KRS 0000347935), 60-198 Poznań (Poland), Pastelowa 8, +48616006170, <a href="mailto:bok@dotpay.pl">bok@dotpay.pl</a>, see <a title="regulations of payments" target="_blank" href="https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/rodo_en">the full text of the information clause</a>.';
             }
 
             $form->addField('bylaw_label', 'dotpay_agreement', array(
