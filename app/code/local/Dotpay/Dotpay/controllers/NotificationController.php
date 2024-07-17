@@ -34,20 +34,12 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      */
     const DOTPAY_CALLBACK_IP_WHITE_LIST = array(
         '195.150.9.37',
-        '91.216.191.181',
-        '91.216.191.182',
-        '91.216.191.183',
-        '91.216.191.184',
-        '91.216.191.185',
-        '5.252.202.254 ',
+        '5.252.202.254',
         '5.252.202.255',
+        '20.215.81.124'
         );
     
-    /**
-     * Dotpay office IP
-     */
-    const OFFICE_IP = '77.79.195.34';
-    
+   
 
     /**
      * Currently processed order
@@ -212,23 +204,6 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
             }
 
 
-        if($CHECK_IP == self::OFFICE_IP && $_SERVER['REQUEST_METHOD'] == 'GET') {
-            die("--- Dotpay Magento1 ---"."<br>".
-                "Active: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('test')."<br><br>".
-                "--- System Info ---"."<br>".
-                "Magento Version: ". Mage::getVersion() ."<br>".
-                "Module Version: ".Mage::getConfig()->getNode()->modules->Dotpay_Dotpay->version."<br>".
-                "PHP Version: ".PHP_VERSION."<br><br>".
-                "--- Dotpay PLN ---"."<br>".
-                "ID: ".Mage::getModel('dotpay/paymentMethod')->getConfigData('id')."<br>".
-                "API Version: next(!)<br>".
-                "Account migrated to P24: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('dproxy_migrated')."<br>".
-                "Test Mode: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('test')."<br>".
-                "Server does not use a proxy: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('nonproxy')."<br>".
-                "Email Invoice: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('invoice')."<br>".
-                "Widget: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('widget')
-            );
-        }
     }
     
     /**

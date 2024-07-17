@@ -2,7 +2,7 @@
 <config>
   <modules>
     <Dotpay_Dotpay>
-      <version>1.3.0</version>
+      <version>1.3.1</version>
     </Dotpay_Dotpay>
   </modules>
   <global>
@@ -93,12 +93,11 @@
         <active>0</active>
         <model>dotpay/paymentMethod</model>
 	<test>1</test>
-  <dproxy_migrated>1</dproxy_migrated>
   <nonproxy>1</nonproxy>
 	<invoice>1</invoice>
         <title>Przelewy24</title>
 	<sort_order>0</sort_order>
-        <redirect_url>https://ssl.dotpay.pl/t2/</redirect_url>
+        <redirect_url>https://dproxy.przelewy24.pl/t2/</redirect_url>
         <redirect_url_test>https://ssl.dotpay.pl/test_payment/</redirect_url_test>
         <redirect_url_dproxy>https://dproxy.przelewy24.pl/t2/</redirect_url_dproxy>
       </dotpay>

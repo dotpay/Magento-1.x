@@ -104,14 +104,6 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
     }
 
 
-    /**
-     * Checks if this account was migrated from dotpay to Przelewy24 Api
-     * @return boolean
-     */
-    public function isMigratedtoP24() {
-        return ($this->getMethodInstance()->getConfigData('dproxy_migrated'));
-    }
-
 
     /**
      * Checks, if widget mode is switch on
@@ -161,12 +153,12 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
 
             $bylaw = $this->getMethodInstance()->getAgreements('bylaw');
             if(trim($bylaw) == '') {
-                $bylaw = 'I accept PayPro S.A. <a title="regulations of payments" target="_blank" href="https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/regulations_of_payments">Regulations of Payments</a>.';
+                $bylaw = 'I accept PayPro S.A. <a title="regulations of payments" target="_blank" href="https://przelewy24.pl/en/regulations">Regulations of Payments</a>.';
             }
 
             $personalData = $this->getMethodInstance()->getAgreements('personal_data');
             if(trim($personalData) == '') {
-                $personalData = 'I acknowledge that in order to implement the payment process the Administrator of my personal data is PayPro S.A. (KRS 0000347935), 60-198 Poznań (Poland), Pastelowa 8, +48616006170, <a href="mailto:bok@dotpay.pl">bok@dotpay.pl</a>, see <a title="regulations of payments" target="_blank" href="https://ssl.dotpay.pl/t2/cloudfs1/magellan_media/rodo_en">the full text of the information clause</a>.';
+                $personalData = 'I acknowledge that in order to implement the payment process the Administrator of my personal data is PayPro S.A. (KRS 0000347935), 60-198 Poznań (Poland), Pastelowa 8, see <a title="regulations of payments\" target="_blank" href="https://www.przelewy24.pl/en/information-obligation-gdpr-payer">the full text of the information clause</a>.';
             }
 
             $form->addField('bylaw_label', 'dotpay_agreement', array(

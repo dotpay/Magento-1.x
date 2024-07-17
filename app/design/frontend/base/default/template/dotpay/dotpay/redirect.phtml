@@ -47,7 +47,7 @@
         },
         request: {
             test: <?php if((bool)$this->isTestMode() == 1){ echo '1';}else {echo '0';} ?>,
-            host: '<?php if((bool)$this->isTestMode() == 0 && (bool)$this->isMigratedtoP24() == 1 ){ echo "https://dproxy.przelewy24.pl/t2/payment_api/v1/channels/";}else {echo "https://ssl.dotpay.pl/t2/payment_api/v1/channels/";}?>' 
+            host: '<?php if((bool)$this->isTestMode() == 0 ){ echo "https://dproxy.przelewy24.pl/t2/payment_api/v1/channels/";}else {echo "https://ssl.dotpay.pl/test_payment/payment_api/v1/channels/";}?>' 
             },
         event: {
             onChoose: onChooseChannel

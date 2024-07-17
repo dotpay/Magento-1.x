@@ -70,18 +70,14 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      */
     public function getRedirectUrl() {
 
-        if ($this->getConfigData('dproxy_migrated') && !$this->getConfigData('test')){
+        if (!$this->getConfigData('test')){
             
             return $this->getConfigData('redirect_url_dproxy');
 
         }else{
                 
-            if (!$this->getConfigData('test') ) {
-                return $this->getConfigData('redirect_url');
-            } else {
-                return $this->getConfigData('redirect_url_test');
-            }
-            
+            return $this->getConfigData('redirect_url_test');
+
         }
 
     }

@@ -11134,7 +11134,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
             if(defaultConfig.request.test) {
                 defaultConfig.request.host = 'https://ssl.dotpay.pl/test_payment/payment_api/v1/channels/'
             } else {
-                defaultConfig.request.host = 'https://ssl.dotpay.pl/t2/payment_api/v1/channels/'
+                defaultConfig.request.host = 'https://dproxy.przelewy24.pl/t2/payment_api/v1/channels/'
             }
         }
         return defaultConfig;
